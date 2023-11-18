@@ -1,62 +1,42 @@
 import {Link} from 'react-router-dom'
-import HistoryContext from '../../Context/RegisterContext'
+import MeetupContext from '../../Context/MeetupContext'
+import './index.css'
 
-import {
-  MainDiv,
-  BeforeRegisH1,
-  BeforeRegisP,
-  BeforeRegisBtn,
-  BeforeRegisImg,
-  AfterRegisImg,
-  AfterRegisH1,
-  AfterRegisP,
-} from './styledComponent'
-import NavBar from '../Navbar'
+const Home = () => (
+  <MeetupContext.Consumer>
+    {value => {
+      const {name, topic, register} = value
+      const isTrue = name === 'Welcome to Meetup'
+      return (
+        <div className="home-background">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/meetup/website-logo-img.png"
+            alt="website logo"
+          />
+          <div className="submit-button-container">
+            <h1 className={isTrue ? 'home-heading' : 'home-heading2'}>
+              {name}
+            </h1>
+            <p className={isTrue ? 'home-paragraph' : 'home-paragraph2'}>
+              {topic}
+            </p>
+            {register && (
+              <Link to="/register">
+                <button className="register-button" type="button">
+                  Register
+                </button>
+              </Link>
+            )}
+            <img
+              className="meetup-image"
+              src="https://assets.ccbp.in/frontend/react-js/meetup/meetup-img.png"
+              alt="meetup"
+            />
+          </div>
+        </div>
+      )
+    }}
+  </MeetupContext.Consumer>
+)
 
-const Home = props => {
-  const onClickRegister = () => {
-    const {history} = props
-    history.replace('/register')
-  }
-  const renderBeforeRegisteredView = () => (
-    <>
-      <BeforeRegisH1>Welcome to Meetup</BeforeRegisH1>
-      <BeforeRegisP>Please register for the topic</BeforeRegisP>
-      <Link to="/register">
-        <BeforeRegisBtn onClick={onClickRegister}>Register</BeforeRegisBtn>
-      </Link>
-      <BeforeRegisImg
-        src="https://assets.ccbp.in/frontend/react-js/meetup/meetup-img.png"
-        alt="meetup"
-      />
-    </>
-  )
-  const renderAfterRegisteredView = (name, topic) => (
-    <>
-      <AfterRegisH1>{`Hello ${name}`}</AfterRegisH1>
-      <AfterRegisP>{`Welcome to ${topic}`}</AfterRegisP>
-      <AfterRegisImg
-        src="https://assets.ccbp.in/frontend/react-js/meetup/meetup-img.png"
-        alt="meetup"
-      />
-    </>
-  )
-  return (
-    <HistoryContext.Consumer>
-      {value => {
-        const {isRegister, name, topic} = value
-        return (
-          <>
-            <NavBar />
-            <MainDiv>
-              {isRegister
-                ? renderAfterRegisteredView(name, topic)
-                : renderBeforeRegisteredView()}
-            </MainDiv>
-          </>
-        )
-      }}
-    </HistoryContext.Consumer>
-  )
-}
 export default Home
